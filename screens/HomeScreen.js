@@ -31,8 +31,8 @@ const HomeScreen = () => {
     setLoading(false);
   };
 
-  const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  // const user = useSelector((state) => state.user);
+  // const dispatch = useDispatch();
 
   return (
     <View className="flex-1 bg-neutral-800">

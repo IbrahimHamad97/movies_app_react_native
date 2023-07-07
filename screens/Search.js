@@ -41,8 +41,8 @@ const Search = () => {
         style={{ width: width * 0.9, marginTop: height * 0.02 }}
       >
         <TextInput
-          className="rounded-full text-white placeholder-white flex-1 pl-6"
-          placeholder="holder"
+          className="rounded-full text-white flex-1 pl-6"
+          placeholder="Search For Movies..."
           placeholderTextColor="lightgray"
           onChangeText={handleTextDebounce}
         />

@@ -16,7 +16,7 @@ const HeaderBtn = ({ icon }) => {
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={() => navigation.push("Login")}>
-          <UserIcon size={30} strokeWidth={2} color="white" />
+          <UserIcon size={24} strokeWidth={2} color="white" />
         </TouchableOpacity>
       )}
     </View>

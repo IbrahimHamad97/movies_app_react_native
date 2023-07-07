@@ -11,7 +11,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="rgb(38 38 38)" barStyle="light-content" />
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ animation: "slide_from_bottom" }}>
         <Stack.Screen
           name="Home"
           options={{
