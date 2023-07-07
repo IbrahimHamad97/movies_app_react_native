@@ -21,6 +21,7 @@ export const TrendingMovies = ({ data }) => {
             height={height * 0.4}
             movie={item.item ? item.item : item}
             onPress={() => goToMovie(item)}
+            showTitle={false}
           />
         )}
         sliderWidth={width}

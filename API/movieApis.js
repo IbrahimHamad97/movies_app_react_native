@@ -3,8 +3,10 @@ const apiKey = "707414e69b0a5e6234ef7f10d3320a1e";
 
 const baseUrl = "https://api.themoviedb.org/3/";
 const trendingMoviesUrl = baseUrl + "trending/movie/day?api_key=" + apiKey;
-const upcomingMoviesUrl = baseUrl + "movie/upcoming?api_key=" + apiKey;
-const topRatedMoviesUrl = baseUrl + "movie/top_rated?api_key=" + apiKey;
+const upcomingMoviesUrl = (page) =>
+  baseUrl + `movie/upcoming?page=${page}&api_key=` + apiKey;
+const topRatedMoviesUrl = (page) =>
+  baseUrl + `movie/top_rated?page=${page}&api_key=` + apiKey;
 
 export const fallbackMoviePoster =
   "https://img.myloview.com/stickers/white-laptop-screen-with-hd-video-technology-icon-isolated-on-grey-background-abstract-circle-random-dots-vector-illustration-400-176057922.jpg";
@@ -71,10 +73,10 @@ export const getTrending = () => {
   return apiCall(trendingMoviesUrl);
 };
 
-export const getUpcoming = () => {
-  return apiCall(upcomingMoviesUrl);
+export const getUpcoming = (page) => {
+  return apiCall(upcomingMoviesUrl(page));
 };
 
-export const getTopRated = () => {
-  return apiCall(topRatedMoviesUrl);
+export const getTopRated = (page) => {
+  return apiCall(topRatedMoviesUrl(page));
 };
