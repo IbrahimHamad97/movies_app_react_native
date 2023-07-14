@@ -20,17 +20,50 @@ import {
   getActorMovies,
   img185,
 } from "../API/movieApis";
+import { useDispatch, useSelector } from "react-redux";
+import { editProfile } from "../API/authApis";
+import { setUser } from "../store/user/userReducer";
+import Toast, { BaseToast } from "react-native-toast-message";
 
 const { width, height } = Dimensions.get("window");
 const ios = Platform.OS === "ios";
 const topMargin = ios ? "" : "py-4 px-6";
 const Actor = () => {
+  const toastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: "white" }}
+        className="bg-green-600"
+        text1Style={{
+          color: "white",
+        }}
+        text2Style={{
+          color: "white",
+        }}
+      />
+    ),
+    error: (props) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: "white" }}
+        className="bg-red-800"
+        text1Style={{
+          color: "white",
+        }}
+        text2Style={{
+          color: "white",
+        }}
+      />
+    ),
+  };
   const { params: actor } = useRoute();
   const navigation = useNavigation();
   const [isFav, setfav] = useState(false);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dets, setDets] = useState();
+  const [isFaved, setisFaved] = useState(false);
 
   useEffect(() => {
     getDets();
@@ -48,9 +81,62 @@ const Actor = () => {
     setMovies(res.cast);
   };
 
+  const user = useSelector((state) => state.user.user);
+  useEffect(() => {
+    checkIds();
+  }, [user]);
+
+  const dispatch = useDispatch();
+  checkIds = () => {
+    for (let i = 0; i < user?.facoriteActors?.length; i++) {
+      if (user?.facoriteActors[i].id === actor.id) {
+        setisFaved(true);
+        break;
+      } else setisFaved(false);
+    }
+  };
+
+  const setFavorite = async () => {
+    try {
+      const mov = {
+        profile_path: actor.profile_path,
+        name: actor.name,
+        place_of_birth: actor.place_of_birth,
+        id: actor.id,
+      };
+
+      let updatedFavs = user.facoriteActors;
+      if (isFaved) {
+        updatedFavs = updatedFavs.filter((f) => f.id !== mov.id);
+        setisFaved(false);
+      } else {
+        updatedFavs = [...updatedFavs, mov];
+        setisFaved(true);
+      }
+
+      const res = await editProfile({
+        facoriteActors: updatedFavs,
+        id: user._id,
+        fav: true,
+      });
+      if (res) {
+        Toast.show({
+          type: "success",
+          text1: "Success!",
+          text2: isFaved
+            ? "Actor was removed from favorites"
+            : "Actor was added to favorites",
+        });
+        dispatch(setUser(res));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ScrollView
-      className="bg-neutral-900 flex-1"
+      className="bg-neutral-800 flex-1"
       showsHorizontalScrollIndicator={false}
     >
       {loading ? (
@@ -70,11 +156,11 @@ const Actor = () => {
               <ChevronLeftIcon strokeWidth={2.5} size="28" color="white" />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setfav(!isFav)}>
+            <TouchableOpacity onPress={() => setFavorite()}>
               <HeartIcon
                 strokeWidth={2.5}
                 size="35"
-                color={isFav ? "red" : "white"}
+                color={isFaved ? theme.background : "white"}
               />
             </TouchableOpacity>
           </SafeAreaView>
@@ -140,6 +226,7 @@ const Actor = () => {
       {!loading && (
         <MovieList title="Known For" data={movies} hideSeeAll={true} />
       )}
+      <Toast config={toastConfig} />
     </ScrollView>
   );
 };

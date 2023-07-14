@@ -1,7 +1,15 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { HomeScreen, Movie, Actor, Search, AllMovies, Login } from "../screens";
+import {
+  HomeScreen,
+  Movie,
+  Actor,
+  Search,
+  AllMovies,
+  Login,
+  UserProfile,
+} from "../screens";
 import { HeaderBtn } from "../components";
 import { StatusBar } from "react-native";
 
@@ -61,6 +69,13 @@ const Navigation = () => {
             headerShown: false,
           }}
           component={Login}
+        />
+        <Stack.Screen
+          name="User"
+          options={{
+            headerShown: false,
+          }}
+          component={UserProfile}
         />
       </Stack.Navigator>
     </NavigationContainer>

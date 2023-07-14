@@ -3,17 +3,42 @@ import React, { useEffect, useState } from "react";
 import { Loading, MovieList, TrendingMovies } from "../components";
 import { getTopRated, getTrending, getUpcoming } from "../API/movieApis";
 import { useDispatch, useSelector } from "react-redux";
+import { toastConfig } from "../helpers/Toast";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { useRoute } from "@react-navigation/native";
+import { getUser } from "../API/authApis";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setUser } from "../store/user/userReducer";
+
 const HomeScreen = () => {
   const [trending, setTrending] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    getToken();
     getTrendingMovies();
     getUpcomingMovies();
     getTopRatedMovies();
   }, []);
+
+  getToken = async () => {
+    try {
+      const t = await AsyncStorage.getItem("token");
+      if (t) {
+        const user = await getUser(t);
+        dispatch(setUser(user));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const user = useSelector((state) => state.user.user);
+  useEffect(() => {}, [user]);
 
   getTrendingMovies = async () => {
     const data = await getTrending();
@@ -30,9 +55,6 @@ const HomeScreen = () => {
     if (data && data.results) setTopRated(data.results);
     setLoading(false);
   };
-
-  // const user = useSelector((state) => state.user);
-  // const dispatch = useDispatch();
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -52,6 +74,7 @@ const HomeScreen = () => {
           )}
         </ScrollView>
       )}
+      <Toast config={toastConfig} />
     </View>
   );
 };

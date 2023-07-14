@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 import {
   Dimensions,
-  FlatList,
   ScrollView,
   Text,
   TextInput,
