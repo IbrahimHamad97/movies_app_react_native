@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setToken } from "../store/user/userReducer";
-baseUrl = "http://192.168.100.23:8000/api/";
+baseUrl = "http://192.168.100.23:3000/api/";
 const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
