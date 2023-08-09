@@ -15,7 +15,6 @@ const HomeScreen = () => {
   const [upcoming, setUpcoming] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ const HomeScreen = () => {
       const t = await AsyncStorage.getItem("token");
       if (t) {
         const user = await getUser(t);
-        dispatch(setUser(user));
+        if (user) dispatch(setUser(user));
       }
     } catch (err) {
       console.log(err);
